@@ -47,15 +47,15 @@ module SystemF where
   [ N := x ]e (M [ α ]) = ([ N := x ]e M)[ α ]
 
   -- Substitution rules for types
-  [_:=_]v_ : Type → Id → Type → Type
-  [ U := α ]v Bool = Bool 
-  [ U := α ]v (` x) with α ≟ x
+  [_:=_]t_ : Type → Id → Type → Type
+  [ U := α ]t Bool = Bool 
+  [ U := α ]t (` x) with α ≟ x
   ... | yes _ = U
   ... | no _ = ` x
-  [ U := α ]v (T₁ ⇒ T₂) = ([ U := α ]v T₁) ⇒ ([ U := α ]v T₂)
-  [ U := α ]v (all[ x ]⇒ T) with α ≟ x
+  [ U := α ]t (T₁ ⇒ T₂) = ([ U := α ]t T₁) ⇒ ([ U := α ]t T₂)
+  [ U := α ]t (all[ x ]⇒ T) with α ≟ x
   ... | yes _ = all[ x ]⇒ T
-  ... | no _ = all[ x ]⇒ ([ U := α ]v T)
+  ... | no _ = all[ x ]⇒ ([ U := α ]t T)
 
   -- Value judgements
   data Value : Expr → Set where
@@ -84,6 +84,9 @@ module SystemF where
         ------------------------------
       → ((ƛ[ x ]⇒ N) ∙ V) ⟶ ([ V := x ]e N)
 
+    tyapp/lam : ∀ { α τ M }
+      → ((Λ[ α ]⇒ M)[ τ ]) ⟶ M
+
   -- Reflexive, transitive closure of step
   data _⟶*_ : Expr → Expr → Set where
     step/refl : ∀ { M }
@@ -94,4 +97,20 @@ module SystemF where
       → L ⟶* M → M ⟶ N
       -------------------
       → L ⟶* N
+
+  -- Typing Context
+  data Ctxt : Set where
+    ∅ : Ctxt
+    _,_⦂_ : Ctxt → Id → Type → Ctxt
+
+  -- Typing Rules
+  data _⊢_⦂_ : Ctxt → Expr → Type → Set where
+    ty/true : ∀ { Γ }
+      -------------
+      → Γ ⊢ true ⦂ Bool
+
+    ty/false : ∀ { Γ }
+      -------------
+      → Γ ⊢ false ⦂ Bool
+
   
