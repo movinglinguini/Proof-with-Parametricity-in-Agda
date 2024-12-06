@@ -25,14 +25,14 @@ module SystemF where
     `_ : Id → Expr
     -- Function expression
     ƛ[_]⇒_ : Id → Expr → Expr
-    -- Application
-    _∙_ : Expr → Expr → Expr
     -- Polymorphic
     Λ[_]⇒_ : Id → Expr → Expr
     -- Poly-app
     _[_] : Expr → Type → Expr
+    -- Application
+    _∙_ : Expr → Expr → Expr
 
-  -- Substitution rules for expressions
+  -- Expression substitution
   [_:=_]e_ : Expr → Id → Expr → Expr
   [ N := x ]e true = true 
   [ N := x ]e false = false
