@@ -6,7 +6,7 @@ import Data.Product using (_×_; proj₁; proj₂) renaming (_,_ to ⟨_,_⟩)
 open import SystemF
 
 module Parametricity where 
-  -- Logical Equivalence... sort of
+  -- Equivalence rules
   data _∼⟦_⟧_ : Expr → Type → Expr → Set where
     expr : ∀ { e₁ e₂ v₁ v₂ τ }
       → e₁ ⟶* v₁ → e₂ ⟶* v₂ → v₁ ∼⟦ τ ⟧ v₂ 
