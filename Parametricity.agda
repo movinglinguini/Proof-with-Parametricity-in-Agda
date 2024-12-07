@@ -51,15 +51,16 @@ module Parametricity where
     -- σ₀ : Type
 
   id = Λ[ "α" ]⇒ (ƛ[ "x" ]⇒ ` "x")
-  f-is-id : ∀ { α } → f ∼⟦ all[ α ]⇒ ((` α) ⇒ (` α)) ⟧ id
-  f-is-id = tylam lemma-2
+  f-is-id : ∀ ( α ) ( R σ σ' : Type ) ( v v' : Expr ) → f ∼⟦ all[ α ]⇒ ((` α) ⇒ (` α)) ⟧ id
+  f-is-id α R σ σ' v v' = tylam {f} {id} {_} {R} {_} {σ} {σ'} (lemma-2 {σ} {σ'} {_} {v} {v'})
     where
       -- Lemma 1
       lemma-1 : ∀ { v σ } → ((f [ σ ] ) ∙ v) ⟶* v
-      lemma-1 { v₀ } { σ₀ } = expr/inv-1 { (f [ σ₀ ]) ∙ v₀ } { (f [ σ₀ ]) ∙ v₀ } (lam-inv (tylam-inv (parametricity f-type)) v₀~v₀)
+      -- lemma-1 { v₀ } { σ₀ } = expr/inv-1 { (f [ σ₀ ]) ∙ v₀ } { (f [ σ₀ ]) ∙ v₀ } (lam-inv (tylam-inv (parametricity f-type)) v₀~v₀)
+      lemma-1 { v₀ } { σ₀ } = expr/inv-1 (lam-inv (tylam-inv {_} {_} {_} {σ₀} {α} {_} {σ₀} (parametricity f-type)) v₀~v₀)
         where
           postulate
-            v₀~v₀ : v₀ ∼⟦ σ₀ ⟧ v₀
+            v₀~v₀ : v₀ ∼⟦ [ σ₀ := α ]t (` α) ⟧ v₀
 
       -- For the theorem statement, we'll need to step through id ∙ v
       idv→v : ∀ { v σ } → ((id [ σ ]) ∙ v) ⟶* v
@@ -69,8 +70,8 @@ module Parametricity where
             vValue : Value v
       
       -- -- step/trans (step/trans step/refl (app/1 tyapp/lam)) app/lam
-      lemma-2 : ∀ { σ σ' τ α } → (f [ σ ]) ∼⟦ τ ⇒ τ ⟧ (id [ σ' ])
-      lemma-2 { σ } { σ' } { τ } = lam v~v (expr lemma-1 idv→v v~v)
+      lemma-2 : ∀ { σ σ' τ } { v v' : Expr } → (f [ σ ]) ∼⟦ τ ⇒ τ ⟧ (id [ σ' ])
+      lemma-2 { σ } { σ' } { τ } { v } { v' } = lam {_} {_} {_} {_} {v} {v'} v~v (expr lemma-1 idv→v v~v)
         where
           postulate
             v~v : ∀ { v v' } → v ∼⟦ τ ⟧ v'
