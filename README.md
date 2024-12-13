@@ -10,6 +10,5 @@ It illustrates how to perform a small proof using a parametricity theorem.
 - `SystemF.agda` encodes a fragment of System F with polymorphic types and expressions.
 - `Parametricity.agda` contains equivalence rules, the parametricity theorem (postulated--no proof), and the theorem we want to prove.
 - `LFT.agda` was made to experiment with the Lightweight Free Theorems package for Agda. See [the package page on the wiki](https://wiki.portal.chalmers.se/agda/agda.php?n=Libraries.LightweightFreeTheorems) for instructions on how to use that.
-
-
-
+- `Zine.agda` is the zine I made for explaining the code (part of the project requirements) in printable format.
+- `Zine-Book.agda` is the same zine but in PDF book format, so you can read through it easily on GitHub without download.
